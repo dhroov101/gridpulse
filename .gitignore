@@ -1,0 +1,25 @@
+
+# Python environments
+.venv/
+venv/
+
+# Python-generated files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# Local data and generated outputs
+data/
+*.duckdb
+*.db
+
+# Editor and operating-system files
+.vscode/
+.DS_Store
+Thumbs.db
