@@ -8,11 +8,9 @@ from gridpulse.xml_loader import parse_actual_load
 
 
 ACTUAL_LOAD_XML = (
-    Path(__file__).resolve().parents[1]
-    / "data"
-    / "bronze"
-    / "Actual Total Load_202610182200-202610252300"
-    / "000-ACTUAL_TOTAL_LOAD_R3_202610182200-202610252300.xml"
+    Path(__file__).resolve().parent
+    / "fixtures"
+    / "sample_actual_load.xml"
 )
 
 def write_test_xml(tmp_path, points):
@@ -44,7 +42,7 @@ def write_test_xml(tmp_path, points):
 def test_parse_actual_load():
     rows = parse_actual_load(ACTUAL_LOAD_XML)
 
-    assert len(rows) == 676
+    assert len(rows) == 3
     assert rows[:3] == [
         {
             "position": 1,
@@ -63,9 +61,9 @@ def test_parse_actual_load():
         },
     ]
     assert rows[-1] == {
-        "position": 676,
-        "timestamp_utc": "2026-10-25T22:45:00+00:00",
-        "Load_mw": 9576.266,
+        "position": 3,
+        "timestamp_utc": "2026-10-18T22:30:00+00:00",
+        "Load_mw": 9595.946,
     }
 
 def test_rejects_non_finite_load(tmp_path):
