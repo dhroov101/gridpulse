@@ -71,6 +71,34 @@ def test_rejects_non_finite_load(tmp_path):
 
     with pytest.raises(ValueError, match="finite"):
         parse_actual_load(xml_file)
+def test_out_of_order_positions(tmp_path):
+    xml_file = write_test_xml(
+        tmp_path,
+        [(2, "9610.646"), (1, "9489.796")],
+    )
+
+    with pytest.raises(ValueError, match="Points must be in ascending order by position"):
+        parse_actual_load(xml_file)
+
+def test_rejects_missing_postion(tmp_path):
+    xml_file = write_test_xml(
+        tmp_path,
+        [(1, "9489.796"), (3, "9595.946")],
+    )
+
+    with pytest.raises(ValueError, match="Missing point position"):
+        parse_actual_load(xml_file)
+
+
+def test_rejects_missing_positions(tmp_path):
+    xml_file = write_test_xml(
+        tmp_path,
+        [(1, "9489.796"), (3, "9595.946")],
+    )
+
+    with pytest.raises(ValueError, match="Missing point position"):
+        parse_actual_load(xml_file)
+
 
 def test_rejects_duplicate_positions(tmp_path):
     xml_file = write_test_xml(

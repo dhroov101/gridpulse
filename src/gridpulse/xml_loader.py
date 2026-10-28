@@ -57,14 +57,20 @@ def parse_actual_load(xml_file):
             raise ValueError(f"Period resolution must be positive: {resolution!r}")
 
         seen_positions = set()
-
+        previous_position = 0
         for point in period:
             if point.tag.rsplit("}", 1)[-1] != "Point":
                 continue
             position = int(child_text(point, "position"))
+            
             if position in seen_positions:
                 raise ValueError(f"Duplicate point position: {position}")
             seen_positions.add(position)
+            if position <= previous_position:
+                raise ValueError(
+                    "Points must be in ascending order by position"
+                )
+            previous_position = position
             if position < 1:
                 raise ValueError(f"Point position must be positive: {position}")
             load = float(child_text(point, "quantity"))
@@ -78,5 +84,19 @@ def parse_actual_load(xml_file):
                     "Load_mw": load,
                 }
             )
+        
+    if not actual_load_data:
+        raise ValueError("No measurement points found in XML")
+
+    positions = {row["position"] for row in actual_load_data}
+    expected_positions = set(range(1, max(positions) + 1))
+    missing_positions = expected_positions - positions
+
+    if missing_positions:
+        first_missing = min(missing_positions)
+        raise ValueError(
+            f"Missing point position: {first_missing}"
+        )
+
 
     return actual_load_data
