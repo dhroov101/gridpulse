@@ -1,3 +1,3 @@
 pytest
-panadas
-pyarrrow
+pandas
+pyarrow
