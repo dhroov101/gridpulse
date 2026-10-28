@@ -81,7 +81,7 @@ def parse_actual_load(xml_file):
                 {
                     "position": position,
                     "timestamp_utc": timestamp.isoformat(),
-                    "Load_mw": load,
+                    "load_mw": load,
                 }
             )
         

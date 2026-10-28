@@ -1,18 +1,22 @@
 
-# Python environments
+# Python virtual environments
 .venv/
+.venv_msys2_backup/
 venv/
 
-# Python-generated files
+# Python cache and test artifacts
 __pycache__/
 *.py[cod]
 .pytest_cache/
-.mypy_cache/
 
-# Secrets and local configuration
+# Local data
+data/
+
+# Secrets and local environment
 .env
 .env.*
 !.env.example
+
 
 # Local data and generated outputs
 data/

@@ -47,23 +47,23 @@ def test_parse_actual_load():
         {
             "position": 1,
             "timestamp_utc": "2026-10-18T22:00:00+00:00",
-            "Load_mw": 9489.796,
+            "load_mw": 9489.796,
         },
         {
             "position": 2,
             "timestamp_utc": "2026-10-18T22:15:00+00:00",
-            "Load_mw": 9610.646,
+            "load_mw": 9610.646,
         },
         {
             "position": 3,
             "timestamp_utc": "2026-10-18T22:30:00+00:00",
-            "Load_mw": 9595.946,
+            "load_mw": 9595.946,
         },
     ]
     assert rows[-1] == {
         "position": 3,
         "timestamp_utc": "2026-10-18T22:30:00+00:00",
-        "Load_mw": 9595.946,
+        "load_mw": 9595.946,
     }
 
 def test_rejects_non_finite_load(tmp_path):
