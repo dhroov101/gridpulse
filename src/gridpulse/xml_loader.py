@@ -5,12 +5,12 @@ import xml.etree.ElementTree as ET
 import math
 
 
-def parse_actual_load(xml_file):
+def _parse_load_points(xml_file,value_key):
     """
-    Parse actual electricity load points from an ENTSO-E XML file.
+    Parse  electricity load points from an ENTSO-E XML file.
 
     Args:
-        xml_file (str | Path): Path to the actual-load XML file.
+        xml_file (str | Path): Path to the -load XML file.
 
     Returns:
         list[dict]: Rows with Position, Timestamp (UTC), and Load (MW) fields.
@@ -25,7 +25,7 @@ def parse_actual_load(xml_file):
                 return child.text.strip()
         raise ValueError(f"Missing or empty <{name}> element in {xml_file}")
 
-    actual_load_data = []
+    load_data = []
     for period in root.iter():
         if period.tag.rsplit("}", 1)[-1] != "Period":
             continue
@@ -77,18 +77,18 @@ def parse_actual_load(xml_file):
             if not math.isfinite(load):
                 raise ValueError(f"Point load must be finite: {load}")
             timestamp = start + (position - 1) * step
-            actual_load_data.append(
+            load_data.append(
                 {
                     "position": position,
                     "timestamp_utc": timestamp.isoformat(),
-                    "load_mw": load,
+                    value_key: load,
                 }
             )
         
-    if not actual_load_data:
+    if not load_data:
         raise ValueError("No measurement points found in XML")
 
-    positions = {row["position"] for row in actual_load_data}
+    positions = {row["position"] for row in load_data}
     expected_positions = set(range(1, max(positions) + 1))
     missing_positions = expected_positions - positions
 
@@ -99,4 +99,14 @@ def parse_actual_load(xml_file):
         )
 
 
-    return actual_load_data
+    return load_data
+
+
+def parse_actual_load(xml_file):
+    """Parse actual electricity load points from ENTSO-E XML."""
+    return _parse_load_points(xml_file, "load_mw")
+
+
+def parse_day_ahead_forecast(xml_file):
+    """Parse day-ahead forecast load points from ENTSO-E XML."""
+    return _parse_load_points(xml_file, "forecast_load_mw")

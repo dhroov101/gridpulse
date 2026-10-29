@@ -29,10 +29,7 @@ def build_silver_dataframe(xml_file: str | Path) -> pd.DataFrame:
     if df["timestamp_utc"].duplicated().any():
         raise ValueError("Duplicate timestamps found")
 
-    print("Parsed records:", records)
-    print("Missing values by column:")
-    print(df[EXPECTED_COLUMNS].isna().sum())
-    print(df)
+    
 
     if df[EXPECTED_COLUMNS].isna().any().any():
         raise ValueError("Silver data contains missing values")
